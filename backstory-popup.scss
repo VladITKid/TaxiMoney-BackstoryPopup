@@ -2,7 +2,7 @@
 // Цвет выделения текста
 $selection-bg: #1155d471;
 // Цвет блика сияющих кнопок
-$btn-shine-color: #ffffff9c;
+$btn-shine-color: #ffffff86;
 // Множитель для управления размером окошка
 $multiplier: .05;
 // z-index оболочки окна
@@ -240,6 +240,7 @@ body {
         @include shining-btn-mixin(transparent, transparent, transparent, transparent, transparent, transparent, transparent, transparent, transparent, $btn-shine-color)
     }
 }
+// Анимация элементов заставки
 @keyframes title-screen-elements-opacity {
 	from {
 		opacity: 0;
@@ -254,6 +255,24 @@ body {
 	}
 	to {
 		opacity: 1;
+	}
+}
+// Анимация экрана видеозаписи
+@keyframes recording-screen-circle-blinking {
+	from, to {
+		opacity: 0;
+	}
+	50% {
+		opacity: 1;
+	}
+}
+@keyframes recording-screen-camera-focus {
+	from, to {
+		backdrop-filter: blur(0vw);
+	}
+
+	50% {
+		backdrop-filter: blur(.3vw);
 	}
 }
 
@@ -288,7 +307,7 @@ body {
 			height: inherit;
 			width: inherit;
 			opacity: 1;
-			transition: opacity 2s;
+			transition: opacity 1s;
 		}
 	}
 
@@ -367,6 +386,44 @@ body {
 			opacity: 0;
 			transition: opacity 1s;
 		}
+
+		// Экран видеозаписи
+		&-recording-screen {
+			opacity: 0;
+			transition: opacity 1s;
+
+			&--active {
+				opacity: 1;
+				position: absolute;
+				z-index: $wrap-z-index;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				background-image: url('assets/recording-screen.png');
+				background-size: 90%;
+				background-position: center;
+				background-repeat: no-repeat;
+				animation: recording-screen-camera-focus 3s infinite;
+
+				// Мигающая точка
+				&::before {
+					content: '';
+					width: 34vw*$multiplier;
+					height: 34vw*$multiplier;
+					position: absolute;
+					top: 114vw*$multiplier;
+					right: 255vw*$multiplier;
+					border-radius: 100%;
+					background-color: #ff0000;
+					animation: recording-screen-circle-blinking .5s infinite;
+				}
+			}
+		}
+	}
+
+	// * Видео
+	&__video {
+		filter: blur(0vw)
 	}
 
 	//* Строки с эффектом печатания
@@ -416,7 +473,6 @@ body {
 	&__narrator {
 		opacity: 0;
 		transition: opacity 1s;
-		transition-delay: 1s;
 
 		&--active {
 			opacity: 1;
@@ -444,7 +500,7 @@ body {
 		// Линии
 		&-row {
 			// Рассказчик
-			&-1 {}
+			// &-1 {} // ! Стили не заданы
 			// Кнопки и формы
 			&-2 {
 				position: absolute;
@@ -511,5 +567,13 @@ body {
 		-webkit-text-fill-color: transparent;
 		background-color: #e86281;
 		background-image: linear-gradient(180deg, #FF8AA6 0%, #E45678 100%);
+	}
+
+	// * Общие модификаторы элементов
+	&__element {
+		// Модификатор прозрачности
+		&--transparent {
+			opacity: 0;
+		}
 	}
 }
