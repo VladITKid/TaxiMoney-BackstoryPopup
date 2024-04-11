@@ -19,13 +19,16 @@ window.addEventListener('load', () => {
         const slideBtnsBlue = Array.from(document.querySelectorAll('.backstory-popup__btn--blue'));
         const slideBtnsOrange = Array.from(document.querySelectorAll('.backstory-popup__btn--orange'));
 
-        // Для эффектов фотографирования и 
-        const photoBtn = [
+        // Для анимации видеозаписи, вызова палиции и эффекта фотосъёмки
+        const photographingBtn = [
             slideBtnsOrange[1],
             slideBtnsOrange[4]
         ];
+        const photographingScreen = Array.from(document.querySelectorAll('.backstory-popup__slide-photographing-screen'));
         const recordingBtn = slideBtnsOrange[3]; // Кнопка для активации эффекта видеозаписи
         const recordingScreen = document.querySelector('.backstory-popup__slide-recording-screen');
+        const policeCallingBtn = slideBtnsOrange[2];
+        const policeCallingScreen = document.querySelector('.backstory-popup__slide-police-calling-screen');
         
         // Содержимое слайдо
         const bubble = Array.from(document.querySelectorAll('.backstory-popup__bubble'));
@@ -52,7 +55,7 @@ window.addEventListener('load', () => {
         const narratorRow2 = Array.from(document.querySelectorAll('.backstory-popup__narrator-row-2'));
         
         // Кнопка перезапуска слайдера окна 
-        const restartBtn = document.querySelector('backstory-popup__btn--absolute');
+        const restartBtn = document.querySelector('.backstory-popup__btn-restart');
 
 
         // * Функция поочерёдного отображения содержимого слайда окна
@@ -125,7 +128,14 @@ window.addEventListener('load', () => {
             setTimeout(() => {
                 slideNames[1].classList.add('backstory-popup__slide--active');
             }, 2000)
-        }
+        };
+
+
+        // * Функция сияния кнопки
+        function shiningBtnAnimation() {
+            slideBtnsBlue[0].classList.toggle('backstory-popup__btn--blue-shining'); // Добавляем/удаляем класс анимации
+            setTimeout(shiningBtnAnimation, 2000); // Запускаем функцию снова через 2 секунды
+        };
 
 
         // * Функция переключения слайдов по клику
@@ -152,25 +162,54 @@ window.addEventListener('load', () => {
 
                 // * Для 3-го слайда
                 else if (slideNames[1] === slides[2]) {
-                    smoothSlideChanging(slideNames);
-                    addBackstoryPopupSlideContent(
-                        4000,
-                        [slide3Strings1s[0], slide3Strings1s[1], slide3Strings1s[2]], // Строки пузыря реплики
-                        [1000, 1000, 1000],
-                        bubble[0],
-                        narrator[2],
-                        2800,
-                        narratorRow2[2],
-                        1000,
-                        true
-                    );
+                    // Локальная функция (чтобы не дублировать код)
+                    function localFunction1(slideNames) {
+                        smoothSlideChanging(slideNames);
+                        addBackstoryPopupSlideContent(
+                            4000,
+                            [slide3Strings1s[0], slide3Strings1s[1], slide3Strings1s[2]], // Строки пузыря реплики
+                            [1000, 1000, 1000],
+                            bubble[0],
+                            narrator[2],
+                            2800,
+                            narratorRow2[2],
+                            1000,
+                            true
+                        );
+                    }
+                    // С эффектом фотосъёмки
+                    if (btnName === photographingBtn[0]) {
+                        narrator[1].classList.add('backstory-popup__element--transparent');
+                        photographingScreen[0].classList.add('backstory-popup__slide-photographing-screen--active');
+                        setTimeout(() => {
+                            narrator[1].classList.remove('backstory-popup__narrator--active');
+                        }, 1000);
+                        setTimeout(() => {
+                            localFunction1(slideNames) 
+                        }, 2500);
+                    } 
+                    // С анимацией вызова полиции
+                    else if (btnName === policeCallingBtn) {
+                        narrator[1].classList.add('backstory-popup__element--transparent');
+                        policeCallingScreen.classList.add('backstory-popup__slide-police-calling-screen--active');
+                        setTimeout(() => {
+                            narrator[1].classList.remove('backstory-popup__narrator--active');
+                        }, 1000);
+                        setTimeout(() => {
+                            localFunction1(slideNames) 
+                        }, 2500);
+                    } 
+                    // По умолчанию
+                    else {
+                        localFunction1(slideNames);
+                    }
                 }
 
 
                 // * Для 4-го слайда
                 else if (slideNames[1] === slides[3]) {
                     // Локальная функция (чтобы не дублировать код)
-                    function localFunction(slideNames) {
+                    function localFunction2(slideNames) {
                         smoothSlideChanging(slideNames);
                         addBackstoryPopupSlideContent(
                             3000,
@@ -187,7 +226,7 @@ window.addEventListener('load', () => {
                             true
                         );
                     }
-                    // С эффектом видеозаписи
+                    // С анимацией видеозаписи
                     if (btnName === recordingBtn) {
                         bubble[0].classList.add('backstory-popup__element--transparent');
                         narrator[2].classList.add('backstory-popup__element--transparent');
@@ -197,13 +236,25 @@ window.addEventListener('load', () => {
                             narrator[2].classList.remove('backstory-popup__narrator--active');
                         }, 1000);
                         setTimeout(() => {
-                            localFunction(slideNames) 
+                            localFunction2(slideNames) 
                         }, 4000);
-                    // По умолчанию
+                    } 
+                    // С эффектом фотосъёмки
+                    else if (btnName === photographingBtn[1]) {
+                        bubble[0].classList.add('backstory-popup__element--transparent');
+                        narrator[2].classList.add('backstory-popup__element--transparent');
+                        photographingScreen[1].classList.add('backstory-popup__slide-photographing-screen--active');
+                        setTimeout(() => {
+                            bubble[0].classList.remove('backstory-popup__bubble-1--active');
+                            narrator[2].classList.remove('backstory-popup__narrator--active');
+                        }, 1000);
+                        setTimeout(() => {
+                            localFunction2(slideNames) 
+                        }, 2500);
                     } 
                     // По умолчанию
                     else {
-                        localFunction(slideNames);
+                        localFunction2(slideNames);
                     }
                 }
 
@@ -223,10 +274,10 @@ window.addEventListener('load', () => {
                     slide4Strings1s[4].classList.add('backstory-popup__typing-string--active');
                     setTimeout(() => {
                         slide4Strings1s[5].classList.add('backstory-popup__typing-string--active');
-                    }, 2000);
+                    }, 1800);
                     setTimeout(() => {
                         slide4Strings1s[6].classList.add('backstory-popup__typing-string--active');
-                    }, 2800);
+                    }, 3600);
 
                     // Задержка перед вызовом функции для 5-го слайда
                     setTimeout(() => {
@@ -264,10 +315,14 @@ window.addEventListener('load', () => {
                         1800,
                         true
                     );
+                    // Активирую кнопку перезапуска слайдера окна
+                    setTimeout(() => {
+                        restartBtn.classList.add('backstory-popup__btn-restart--active');
+                    }, 13000);
                 };
             });
         };
-        
+
         // * Вызов функции переключения слайдов по клику
         // Для 1-го слайда
         addBackstoryPopupSlideContent(
@@ -281,27 +336,21 @@ window.addEventListener('load', () => {
             3500,
             false
         );
+        setTimeout(shiningBtnAnimation, 7500); // Запускаю сияние через 3c после появления 1-го слайда
+
         // Для 2-го слайда
         nextSlide(slideBtnsBlue[0], [slides[0], slides[1]]);
         // Для 3-го слайда
         nextSlide(slideBtnsOrange[0], [slides[1], slides[2]]);
-        nextSlide(slideBtnsOrange[1], [slides[1], slides[2]]);
-        nextSlide(slideBtnsOrange[2], [slides[1], slides[2]]);
+        nextSlide(photographingBtn[0], [slides[1], slides[2]]); // С эффектом фотосъёмки
+        nextSlide(policeCallingBtn, [slides[1], slides[2]]); // С анимацией вызова полиции
         // Для 4-го слайда
-        nextSlide(recordingBtn, [slides[2], slides[3]]); // С эффектом видеозаписи
-        nextSlide(slideBtnsOrange[4], [slides[2], slides[3]]);
+        nextSlide(recordingBtn, [slides[2], slides[3]]); // С анимацией видеозаписи
+        nextSlide(photographingBtn[1], [slides[2], slides[3]]); // С эффектом фотосъёмки
         nextSlide(slideBtnsOrange[5], [slides[2], slides[3]]);
         // Для 5-го слайда
         nextSlide(slideBtnsBlue[1], [slides[3], slides[4]]);
         //  Для 6-го слайда
         nextSlide(slideBtnsOrange[6], [slides[4], slides[5]]);
-    
-    
-        //* Сияние кнопки с эффектом сияния
-        function toggleAnimation() {
-            slideBtnsBlue[0].classList.toggle('backstory-popup__btn--blue-shining'); // Добавляем/удаляем класс анимации
-            setTimeout(toggleAnimation, 2000); // Запускаем функцию снова через 2 секунды
-        }
-        toggleAnimation();
     }, 6000);
 });
