@@ -1,0 +1,6 @@
+/vscode/
+/node_modules/
+/public/build/
+/public/index.html
+/public/manifest.json
+prepros-6.config

@@ -1,0 +1,15 @@
+{
+  "recommendations": [
+    "eamodio.gitlens",
+    "esbenp.prettier-vscode",
+    "ms-vscode.wordcount",
+    "naumovs.theme-oceanicnext",
+    "oderwat.indent-rainbow",
+    "pflannery.vscode-versionlens",
+    "pkief.material-product-icons",
+    "svelte.svelte-vscode",
+    "tyriar.sort-lines",
+    "vscode-icons-team.vscode-icons",
+    "wmaurer.change-case"
+  ]
+}
