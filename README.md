@@ -1,5 +1,4 @@
-
-![Без названия455](https://github.com/user-attachments/assets/06508d28-214c-4ff7-9135-90473e1b0b45)
+![Без названия455_20241130143540](https://github.com/user-attachments/assets/ada7e68d-c487-4459-8389-c9dbafafcc5a)
 
 # Backstory Popup — Modal Window
 
